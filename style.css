@@ -14,8 +14,6 @@ body {
 .container {
   max-width: 1140px;
   margin: 0 auto;
-  padding: 0 15px;
-  background-color: rgb(90, 90, 90);
 }
 
 .header {
@@ -23,6 +21,11 @@ body {
   justify-content: space-between;
   align-items: center;
   height: 80px;
+  color: white;
+}
+.header__logo,
+.header__search {
+  margin: 20px;
 }
 
 .right-side__search {
@@ -45,6 +48,9 @@ body {
   cursor: pointer;
 }
 
+nav {
+  margin: 20px;
+}
 .category {
   display: flex;
   justify-content: space-between;
@@ -61,6 +67,7 @@ body {
   background-color: rgb(255, 255, 255);
   border-radius: 20px;
 }
+
 li {
   list-style-type: none;
 }
@@ -68,4 +75,60 @@ li {
 a {
   text-decoration: none;
   color: #000000;
+}
+
+.movies {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 25px;
+}
+
+.movieItem {
+  width: 240px;
+  margin: 10px;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid black;
+}
+
+.movieItem:hover,
+.category__item:hover {
+  border: 1px solid greenyellow;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+.movieItem img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.movieItemInfo {
+  padding: 10px;
+}
+.movie__title {
+  font-size: 16px;
+  color: white;
+}
+.movie__genre {
+  font-size: 14px;
+  color: greenyellow;
+}
+.movie__year {
+  font-size: 14px;
+  color: orange;
+}
+.movie__average {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(7, 7, 7, 0.534);
+  font-size: 15px;
+  color: rgb(255, 255, 255);
 }
