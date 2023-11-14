@@ -118,13 +118,21 @@ a {
   font-size: 14px;
   color: orange;
 }
+.heart {
+  height: 40px;
+  width: 40px;
+  position: absolute;
+  right: 6px;
+  top: 6px;
+}
+
 .movie__average {
   position: absolute;
   top: 6px;
   left: 6px;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -30,7 +30,6 @@ async function getMovies(url) {
       },
     });
     const respData = await resp.json();
-    console.log(respData);
     showMovies(respData);
   } catch (error) {
     console.log(error);
@@ -41,10 +40,18 @@ function showMovies(data) {
   const movies = document.querySelector('.movies');
   movies.innerHTML = '';
 
+  const favoritesMovie =
+    JSON.parse(localStorage.getItem('favoritesMovie')) || [];
+
   let filmsArray = data.films || data.results || data.items || data.releases;
 
   filmsArray.forEach((movieItem) => {
+    const isFavorite = favoritesMovie.some(
+      (favorite) => favorite.kinopoiskId === movieItem.kinopoiskId
+    );
+
     const movie = document.createElement('div');
+    movie.dataset.kinopoiskId = movie.kinopoiskId;
     movie.classList.add('movieItem');
     movie.innerHTML = `
           <img
@@ -57,14 +64,64 @@ function showMovies(data) {
               (genre) => ` ${genre.genre}`
             )}</div>
             <div class="movie__year">${movieItem.year}</div>
+            <div class='heart'>
+              <img class="favorite-btn" data-kinopoisk-id="${
+                movie.kinopoiskId
+              }" src="${
+      isFavorite ? './assets/fullHeart.svg' : './assets/emptyHeart.svg'
+    }" alt="heart">
+            </div>
             ${
               movieItem.rating &&
               `<div class="movie__average">${movieItem.rating}</div>`
             }
           </div>
     `;
+
+    const favoriteBtn = movie.querySelector('.favorite-btn');
+
+    favoriteBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (isFavorite) {
+        removeFavorite(movieItem.kinopoiskId);
+      } else {
+        toggleFavorite(movieItem);
+      }
+      showMovies(data);
+    });
+
     movies.appendChild(movie);
   });
+}
+
+function toggleFavorite(movie) {
+  const favoritesMovie =
+    JSON.parse(localStorage.getItem('favoritesMovie')) || [];
+  const movieIndex = favoritesMovie.findIndex(
+    (favorite) => favorite.kinopoiskId === movie.kinopoiskId
+  );
+
+  if (movieIndex === -1) {
+    favoritesMovie.push(movie);
+  }
+  localStorage.setItem('favoritesMovie', JSON.stringify(favoritesMovie));
+
+  showMovies({ films: favoritesMovie });
+
+  return favoritesMovie;
+}
+
+function removeFavorite(kinopoiskId) {
+  const favoritesMovie =
+    JSON.parse(localStorage.getItem('favoritesMovie')) || [];
+  const updatedFavorites = favoritesMovie.filter(
+    (movie) => movie.kinopoiskId !== kinopoiskId
+  );
+  localStorage.setItem('favoritesMovie', JSON.stringify(updatedFavorites));
+
+  showMovies({ films: updatedFavorites });
+
+  return updatedFavorites;
 }
 
 form.addEventListener('submit', (e) => {
@@ -95,4 +152,14 @@ best.addEventListener('click', (e) => {
 releases.addEventListener('click', (e) => {
   e.preventDefault();
   getMovies(API_RELEASES);
+});
+
+favorites.addEventListener('click', (e) => {
+  e.preventDefault();
+  const favoritesMovie =
+    JSON.parse(localStorage.getItem('favoritesMovie')) || [];
+
+  if (favoritesMovie.length > 0) {
+    showMovies({ films: favoritesMovie });
+  }
 });
